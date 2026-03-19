@@ -106,7 +106,8 @@
         }
 
         .section-title {
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            word-break: break-word;
             margin-bottom: 3rem;
             text-align: center;
             background: linear-gradient(to right, var(--text-main), var(--text-muted));
@@ -696,6 +697,9 @@
             
             .stats-grid, .projects-grid { grid-template-columns: 1fr; }
             .terminal-body { padding: 1.5rem; }
+            
+            .contact-wrapper { padding: 2rem 1rem; }
+            #contact .section-title { font-size: clamp(1.5rem, 8vw, 2rem); word-break: break-all; }
         }
     </style>
 </head>
@@ -821,7 +825,7 @@
                             <span class="project-tag">Python</span>
                             <span class="project-tag">CustomTkinter</span>
                             <span class="project-tag">pypdf</span>
-                            <span class="project-tag">LLM_APIs</span>
+                            <span class="project-tag">Local LLMs</span>
                         </div>
                         <div class="project-links">
                             <a href="https://www.linkedin.com/posts/tankienkiong_excited-to-share-a-small-project-ive-been-activity-7439691564978900992-JUEh?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" class="btn btn-cyan">Read Case Study on LinkedIn ↗</a>
@@ -841,7 +845,7 @@
                             <span class="project-tag">Python</span>
                             <span class="project-tag">PySide6</span>
                             <span class="project-tag">openpyxl</span>
-                            <span class="project-tag">Ollama LLM</span>
+                            <span class="project-tag">Local LLMs</span>
                         </div>
                         <div class="project-links">
                             <a href="https://www.linkedin.com/posts/tankienkiong_legaltech-ai-dataprivacy-activity-7438115250119348224-sLaC?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" class="btn btn-cyan">Read Case Study on LinkedIn ↗</a>
@@ -855,13 +859,184 @@
                         📄
                     </div>
                     <div class="project-body">
-                        <h3 class="project-title">Intelligence Document Analysis</h3>
+                        <h3 class="project-title">AI Intelligence Document Analysis</h3>
                         <p class="project-desc">Drag-and-drop web app powered by Gemini 3.1 Pro that transforms PDFs, Excel sheets, and CSVs into instant AI-generated insights, summaries, and actionable intelligence.</p>
                         <div class="project-tags">
                             <span class="project-tag">Google AI Studio</span>
                         </div>
                         <div class="project-links">
                             <a href="https://www.linkedin.com/posts/tankienkiong_imagine-handing-a-50-page-pdf-or-a-massive-activity-7437194449954217984-kU1k?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" class="btn btn-cyan">Read Case Study on LinkedIn ↗</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card glass-panel">
+                    <div class="project-visual">
+                        🏗️
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">AI Prompt Architect</h3>
+                        <p class="project-desc">An AI-powered prompt generator that transforms simple ideas into expert-level prompts with 200+ templates across 20 industries—built in 120 minutes using vibe coding.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Vibe Coding</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://www.linkedin.com/posts/tankienkiong_i-just-spent-2-hours-vibe-coding-and-accidentally-activity-7439752321070223360-CwOh?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" class="btn btn-cyan">Read Case Study on LinkedIn ↗</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="project-card glass-panel">
+                    <div class="project-visual">
+                        🔍
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">LLM Explorer</h3>
+                        <p class="project-desc">An interactive LLM model directory that helps you instantly find the perfect AI model for any workflow—30+ models, brand filtering, use-case matching, and an embedded AI assistant for smart recommendations.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Gemini</span>
+                            <span class="project-tag">Canvas</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://www.linkedin.com/posts/tankienkiong_artificialintelligence-llm-machinelearning-activity-7439712847519096832-OQOX?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" class="btn btn-cyan">Read Case Study on LinkedIn ↗</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="project-card glass-panel">
+                    <div class="project-visual">
+                        📊
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">Excel AI Assistant</h3>
+                        <p class="project-desc">A Python desktop AI copilot for Excel that lets you chat with your data—automatically generate formulas, build models, and extract insights without leaving the spreadsheet.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Python</span>
+                            <span class="project-tag">PySide6</span>
+                            <span class="project-tag">Local LLMs</span>
+                            <span class="project-tag">Pandas</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://www.linkedin.com/posts/tankienkiong_excel-ai-assistant-my-desktop-ai-copilot-activity-7437014594558078977-kY0w?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" class="btn btn-cyan">Read Case Study on LinkedIn ↗</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 7 -->
+                <div class="project-card glass-panel">
+                    <div class="project-visual">
+                        📄
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">OCT Text Extractor</h3>
+                        <p class="project-desc">A Python desktop application featuring OCR text extraction, multi-page document processing, and local LLM integration for automatic summarization and conversational Q&A on document content.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">PySide6</span>
+                            <span class="project-tag">Local LLMs</span>
+                            <span class="project-tag">API</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://www.linkedin.com/posts/tankienkiong_after-two-days-of-experimenting-and-debugging-activity-7435779299959525376-vwJ0?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" class="btn btn-cyan">Read Case Study on LinkedIn ↗</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 8 -->
+                <div class="project-card glass-panel">
+                    <div class="project-visual">
+                        🧠
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">Personal AI Assistant</h3>
+                        <p class="project-desc">Build your personal AI operating system: Combine local autonomy (Picoclaw) with reasoning depth (DeepSeek) to think through problems strategically—perfect for financial modeling, risk scenarios, and workflow optimization.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">DeepSeek</span>
+                            <span class="project-tag">Picoclaw</span>
+                            <span class="project-tag">AI Workflow</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://www.linkedin.com/posts/tankienkiong_aiworkflow-llm-deepseek-activity-7428323917746044936-ti-_?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" class="btn btn-cyan">Read Case Study on LinkedIn ↗</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 9 -->
+                <div class="project-card glass-panel">
+                    <div class="project-visual">
+                        ⚙️
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">Finance Operations Automation</h3>
+                        <p class="project-desc">Migrated finance automation from Tkinter to PySide6: unlocking seamless multi-threading, responsive UI, AI-powered data standardization, and continuous iterative improvement—proving Python is the future of Finance Operations.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Python</span>
+                            <span class="project-tag">PySide6</span>
+                            <span class="project-tag">Finance Automation</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://www.linkedin.com/posts/tankienkiong_financeautomation-python-pyside6-activity-7425071334688337920-4xjY?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" class="btn btn-cyan">Read Case Study on LinkedIn ↗</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 10 -->
+                <div class="project-card glass-panel">
+                    <div class="project-visual">
+                        🛡️
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">Local AI Credit Review Automation</h3>
+                        <p class="project-desc">n8n (self-hosted Docker) + Ollama (local LLM) automatically analyzes AR aging data and generates professional risk assessments and collection strategies—100% private, zero API costs.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">n8n</span>
+                            <span class="project-tag">Ollama</span>
+                            <span class="project-tag">Docker</span>
+                            <span class="project-tag">Finance Automation</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://www.linkedin.com/posts/tankienkiong_financeautomation-n8n-ollama-activity-7418841485720186880-B2F_?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" class="btn btn-cyan">Read Case Study on LinkedIn ↗</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 11 -->
+                <div class="project-card glass-panel">
+                    <div class="project-visual">
+                        📑
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">PDF Merge, Split, Extract Text Tool</h3>
+                        <p class="project-desc">Hybrid AI development strategy: Offline Ollama handles heavy lifting (90%)—merging, splitting, text extraction, private processing—while advanced models provide final polish (10%)—debugging, optimization, professional refinement.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Python</span>
+                            <span class="project-tag">Ollama</span>
+                            <span class="project-tag">AI Development</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://www.linkedin.com/posts/tankienkiong_ollama-python-aidevelopment-activity-7415404373146624000-JLiJ?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" class="btn btn-cyan">Read Case Study on LinkedIn ↗</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 12 -->
+                <div class="project-card glass-panel">
+                    <div class="project-visual">
+                        🤖
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">Local AI Expert Swarm</h3>
+                        <p class="project-desc">Three specialized local models (DeepSeek-R1 architect, Qwen2.5-Coder builder, Llama 3.1 auditor) working in self-correcting loop—think, build, verify, iterate—zero cloud fees, production-ready code. Pure local automation.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Local AI</span>
+                            <span class="project-tag">DeepSeek</span>
+                            <span class="project-tag">Qwen</span>
+                            <span class="project-tag">Llama</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://www.linkedin.com/posts/tankienkiong_a-background-remover-app-activity-7415083456952717312-snOU?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" class="btn btn-cyan">Read Case Study on LinkedIn ↗</a>
                         </div>
                     </div>
                 </div>
