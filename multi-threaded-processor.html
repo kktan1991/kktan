@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Threaded Excel Processor | KK Tan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        /* Base styles copied from index.html for consistency */
+        :root {
+            --bg-color: #050b14;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-cyan: #06b6d4;
+            --accent-gold: #ffb84d;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 40px 20px;
+        }
+        nav {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 40px;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--accent-cyan); }
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--accent-cyan); }
+        .case-study-header {
+            margin-bottom: 40px;
+        }
+        .case-study-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .case-study-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .tag {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-cyan);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .glass-panel h3 {
+            margin-top: 0;
+            color: var(--accent-gold);
+        }
+        pre {
+            border-radius: 8px !important;
+            border: 1px solid var(--glass-border) !important;
+            background: #111827 !important;
+            margin: 0 !important;
+        }
+        code {
+            font-family: 'Fira Code', monospace !important;
+            font-size: 0.9rem !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html" class="logo">KK_<span>TAN</span></a>
+            <a href="index.html#projects" class="back-link">← Back to Projects</a>
+        </nav>
+
+        <header class="case-study-header">
+            <h1 class="case-study-title">Multi-Threaded Excel Processor</h1>
+            <div class="case-study-meta">
+                <span class="tag">Python</span>
+                <span class="tag">Pandas</span>
+                <span class="tag">Tkinter</span>
+                <span class="tag">Multi-threading</span>
+            </div>
+            <p style="color: var(--text-muted);">A robust desktop application designed to process massive Excel workbooks with hundreds of sheets concurrently, drastically reducing processing time.</p>
+        </header>
+
+        <div class="glass-panel">
+            <h3>Project Overview</h3>
+            <p>This tool was built to tackle the challenge of processing massive Excel files (.xlsb) containing hundreds of individual sheets. Sequential processing was too slow, so this application implements a multi-threaded architecture using Python's <code>ThreadPoolExecutor</code> to read and process sheets in parallel.</p>
+            <p><strong>Key Engineering Features:</strong></p>
+            <ul>
+                <li><strong>Concurrent Processing:</strong> Uses <code>ThreadPoolExecutor</code> to read multiple Excel sheets simultaneously, maximizing CPU utilization.</li>
+                <li><strong>Custom Console Redirection:</strong> Implements a custom <code>ConsoleRedirector</code> class to pipe standard output (stdout) directly into a Tkinter Text widget, providing real-time feedback to the user without freezing the GUI.</li>
+                <li><strong>Robust Error Handling:</strong> Gracefully handles empty sheets, missing columns, and file read errors, ensuring the main process completes successfully even if individual sheets fail.</li>
+            </ul>
+        </div>
+
+        <div class="glass-panel" style="padding: 0; overflow: hidden;">
+            <pre><code class="language-python">import os
+import glob
+import pandas as pd
+import tkinter as tk
+from tkinter import filedialog, scrolledtext
+import sys
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+class ConsoleRedirector:
+    """A helper class to redirect stdout to a tkinter Text widget."""
+    def __init__(self, text_widget):
+        self.text_widget = text_widget
+
+    def write(self, string):
+        self.text_widget.insert(tk.END, string)
+        self.text_widget.see(tk.END)
+        self.text_widget.update_idletasks()
+
+    def flush(self):
+        pass
+
+def read_single_excel_file(file_path):
+    """
+    Reads all sheets from a single Excel file.
+    Designed to be run in a separate thread.
+    """
+    try:
+        sheet_names = pd.ExcelFile(file_path).sheet_names
+        print(f"  -> Reading {os.path.basename(file_path)}...")
+        file_dataframes = []
+        for sheet_name in sheet_names:
+            df = pd.read_excel(file_path, sheet_name=sheet_name, header=None)
+            if not df.empty:
+                file_dataframes.append(df)
+        
+        if file_dataframes:
+            combined_file_df = pd.concat(file_dataframes, ignore_index=True)
+            print(f"  -> Finished {os.path.basename(file_path)}: {len(combined_file_df)} rows")
+            return combined_file_df
+        else:
+            print(f"  -> Warning: {os.path.basename(file_path)} is empty.")
+            return None
+    except Exception as e:
+        print(f"  -> Error reading {os.path.basename(file_path)}: {e}")
+        return None
+
+class MultiThreadedProcessorApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Multi-Threaded Excel Processor")
+        self.root.geometry("700x500")
+        
+        self.folder_path = tk.StringVar()
+        
+        self.setup_ui()
+        
+        # Redirect stdout to the text widget
+        sys.stdout = ConsoleRedirector(self.console_text)
+
+    def setup_ui(self):
+        main_frame = tk.Frame(self.root, padx=20, pady=20)
+        main_frame.pack(fill=tk.BOTH, expand=True)
+
+        # Folder Selection
+        folder_frame = tk.Frame(main_frame)
+        folder_frame.pack(fill=tk.X, pady=(0, 10))
+        
+        tk.Label(folder_frame, text="Input Folder:", font=("Arial", 10, "bold")).pack(side=tk.LEFT)
+        tk.Entry(folder_frame, textvariable=self.folder_path, width=50).pack(side=tk.LEFT, padx=10, expand=True, fill=tk.X)
+        tk.Button(folder_frame, text="Browse", command=self.browse_folder).pack(side=tk.LEFT)
+
+        # Run Button
+        self.btn_run = tk.Button(main_frame, text="START PROCESSING", command=self.start_processing, 
+                               bg="#06b6d4", fg="white", font=("Arial", 11, "bold"), pady=10)
+        self.btn_run.pack(fill=tk.X, pady=10)
+
+        # Console Output
+        tk.Label(main_frame, text="Console Output:", font=("Arial", 10, "bold")).pack(anchor="w")
+        self.console_text = scrolledtext.ScrolledText(main_frame, height=15, bg="#1e293b", fg="#e2e8f0", font=("Consolas", 9))
+        self.console_text.pack(fill=tk.BOTH, expand=True, pady=5)
+
+    def browse_folder(self):
+        folder = filedialog.askdirectory()
+        if folder:
+            self.folder_path.set(folder)
+
+    def start_processing(self):
+        folder = self.folder_path.get()
+        if not folder or not os.path.isdir(folder):
+            print("Error: Please select a valid input folder.")
+            return
+            
+        self.btn_run.config(state=tk.DISABLED)
+        self.console_text.delete(1.0, tk.END)
+        print(f"Starting process in folder: {folder}")
+        
+        # Run in a separate thread to keep GUI responsive
+        threading.Thread(target=self.process_files, args=(folder,), daemon=True).start()
+
+    def process_files(self, folder):
+        try:
+            excel_files = glob.glob(os.path.join(folder, "*.xlsx")) + glob.glob(os.path.join(folder, "*.xls"))
+            
+            if not excel_files:
+                print("No Excel files found in the selected folder.")
+                return
+
+            print(f"Found {len(excel_files)} files to process.")
+            print("Initializing ThreadPoolExecutor...")
+            
+            all_dataframes = []
+            
+            # Multi-threading magic happens here
+            with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
+                # Submit all tasks to the executor
+                future_to_file = {executor.submit(read_single_excel_file, file): file for file in excel_files}
+                
+                # Process results as they complete
+                for future in as_completed(future_to_file):
+                    result_df = future.result()
+                    if result_df is not None:
+                        all_dataframes.append(result_df)
+
+            if all_dataframes:
+                print("\nCombining all data...")
+                final_df = pd.concat(all_dataframes, ignore_index=True)
+                print(f"Total rows combined: {len(final_df)}")
+                
+                output_path = os.path.join(folder, "COMBINED_OUTPUT.xlsx")
+                print(f"Saving to {output_path}...")
+                final_df.to_excel(output_path, index=False)
+                print("Process completed successfully!")
+            else:
+                print("No valid data found to combine.")
+
+        except Exception as e:
+            print(f"\nCRITICAL ERROR: {e}")
+        finally:
+            # Re-enable the button safely from the main thread
+            self.root.after(0, lambda: self.btn_run.config(state=tk.NORMAL))
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = MultiThreadedProcessorApp(root)
+    root.mainloop()</code></pre>
+        </div>
+    </div>
+
+    <!-- Syntax Highlighting Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
