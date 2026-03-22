@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1M+ Row Multi-Sheet Exporter | KK Tan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        /* Base styles copied from index.html for consistency */
+        :root {
+            --bg-color: #050b14;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-cyan: #06b6d4;
+            --accent-gold: #ffb84d;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 40px 20px;
+        }
+        nav {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 40px;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--accent-cyan); }
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--accent-cyan); }
+        .case-study-header {
+            margin-bottom: 40px;
+        }
+        .case-study-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .case-study-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .tag {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-cyan);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .glass-panel h3 {
+            margin-top: 0;
+            color: var(--accent-gold);
+        }
+        pre {
+            border-radius: 8px !important;
+            border: 1px solid var(--glass-border) !important;
+            background: #111827 !important;
+            margin: 0 !important;
+        }
+        code {
+            font-family: 'Fira Code', monospace !important;
+            font-size: 0.9rem !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html" class="logo">KK_<span>TAN</span></a>
+            <a href="index.html#projects" class="back-link">← Back to Projects</a>
+        </nav>
+
+        <header class="case-study-header">
+            <h1 class="case-study-title">1M+ Row Multi-Sheet Exporter</h1>
+            <div class="case-study-meta">
+                <span class="tag">Python</span>
+                <span class="tag">Polars</span>
+                <span class="tag">Tkinter</span>
+                <span class="tag">Data Engineering</span>
+            </div>
+            <p style="color: var(--text-muted);">A high-performance desktop tool built with Polars to generate, process, and export massive datasets (1M+ rows) across multiple Excel sheets without memory crashes.</p>
+        </header>
+
+        <div class="glass-panel">
+            <h3>Project Overview</h3>
+            <p>This application solves a common enterprise problem: Excel crashing when trying to export or handle datasets larger than 1 million rows. By leveraging the blazing-fast <strong>Polars</strong> library, this tool splits massive datasets into manageable chunks and writes them across multiple Excel sheets seamlessly.</p>
+            <p><strong>Key Engineering Features:</strong></p>
+            <ul>
+                <li><strong>Polars Integration:</strong> Uses Polars instead of Pandas for significantly faster data generation and processing with lower memory overhead.</li>
+                <li><strong>Chunked Excel Writing:</strong> Automatically slices large datasets and writes them to multiple sheets (e.g., 1M rows per sheet) using <code>xlsxwriter</code>.</li>
+                <li><strong>Interactive GUI:</strong> A clean Tkinter interface allowing users to set intervals, row limits, and manage the end-to-end pipeline with a single click.</li>
+            </ul>
+        </div>
+
+        <div class="glass-panel" style="padding: 0; overflow: hidden;">
+            <pre><code class="language-python">import polars as pl
+import numpy as np
+import os
+import glob
+import tkinter as tk
+from tkinter import messagebox, filedialog
+from datetime import datetime
+
+class DataMasterPro:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Polars Multi-Sheet Master")
+        self.root.geometry("500x520")
+        
+        self.base_path = os.getcwd()
+        self.folder_name = "data_input"
+        self.full_excel_file = "MASTER_DATA_MULTISHEET.xlsx" 
+        
+        self.setup_ui()
+
+    def setup_ui(self):
+        main_frame = tk.Frame(self.root, padx=20, pady=20)
+        main_frame.pack(expand=True, fill="both")
+
+        tk.Label(main_frame, text="1M+ Row Multi-Sheet Exporter", font=('Segoe UI', 14, 'bold')).pack(pady=5)
+        
+        # Path Selection
+        path_frame = tk.LabelFrame(main_frame, text="Working Directory", padx=10, pady=5)
+        path_frame.pack(fill="x", pady=5)
+        self.path_var = tk.StringVar(value=self.base_path)
+        tk.Entry(path_frame, textvariable=self.path_var, state='readonly').pack(side="left", expand=True, fill="x")
+        tk.Button(path_frame, text="Browse", command=self.select_path).pack(side="right", padx=5)
+
+        # Settings
+        input_frame = tk.LabelFrame(main_frame, text="Settings", padx=10, pady=10)
+        input_frame.pack(fill="x", pady=10)
+        tk.Label(input_frame, text="Interval (1m, 1h, 1d):").pack(side="left")
+        self.interval_entry = tk.Entry(input_frame, width=8)
+        self.interval_entry.insert(0, "1h") 
+        self.interval_entry.pack(side="left", padx=5)
+        
+        tk.Label(input_frame, text="Rows/Sheet:").pack(side="left", padx=(10,0))
+        self.row_limit_entry = tk.Entry(input_frame, width=10)
+        self.row_limit_entry.insert(0, "1000000") 
+        self.row_limit_entry.pack(side="left", padx=5)
+
+        # Buttons
+        tk.Button(main_frame, text="Step 1: Clear Old & Generate New Data", height=2, bg="#e1f5fe", command=self.generate_data).pack(fill="x", pady=5)
+        tk.Button(main_frame, text="Step 2: Merge to Multi-Sheet Excel", height=2, bg="#e8f5e9", command=self.merge_to_excel).pack(fill="x", pady=5)
+        tk.Button(main_frame, text="Step 3: Open Excel File", height=2, bg="#c8e6c9", command=self.open_full_file).pack(fill="x", pady=5)
+
+        self.status_var = tk.StringVar(value="Ready")
+        tk.Label(main_frame, textvariable=self.status_var, fg="#555", font=('Segoe UI', 9, 'italic')).pack(pady=10)
+
+    def select_path(self):
+        selected = filedialog.askdirectory()
+        if selected:
+            self.path_var.set(selected)
+            self.base_path = selected
+
+    def generate_data(self):
+        user_interval = self.interval_entry.get().strip()
+        input_dir = os.path.join(self.base_path, self.folder_name)
+        try:
+            # Clear old files to prevent column name mismatch
+            if os.path.exists(input_dir):
+                for f in glob.glob(os.path.join(input_dir, "*.csv")):
+                    os.remove(f)
+            else:
+                os.makedirs(input_dir)
+
+            self.status_var.set("Generating...")
+            self.root.update()
+
+            for i in range(1, 4):
+                num_rows = 400000
+                # FIX: Using datetime_range for sub-day intervals
+                dates = pl.datetime_range(
+                    start=datetime(2023, 1, 1), 
+                    end=datetime(2023, 12, 31), 
+                    interval=user_interval, 
+                    eager=True
+                ).sample(num_rows, with_replacement=True)
+
+                df = pl.DataFrame({
+                    "ID": np.arange(1, num_rows + 1) + ((i-1) * num_rows),
+                    "Timestamp": dates, # Synchronized Column Name
+                    "Revenue": np.random.uniform(10, 1000, size=num_rows).round(2),
+                    "Status": np.random.choice(["Paid", "Pending"], size=num_rows)
+                })
+                df.write_csv(os.path.join(input_dir, f"raw_part_{i}.csv"))
+            
+            self.status_var.set("Success: New data ready.")
+            messagebox.showinfo("Success", "Generated 1.2M rows with 'Timestamp' header.")
+        except Exception as e: 
+            messagebox.showerror("Error", f"Generation failed: {e}")
+
+    def merge_to_excel(self):
+        input_dir = os.path.join(self.base_path, self.folder_name)
+        output_path = os.path.join(self.base_path, self.full_excel_file)
+        
+        try:
+            # Force import to ensure it's visible
+            import xlsxwriter 
+            
+            files = glob.glob(os.path.join(input_dir, "*.csv"))
+            if not files:
+                messagebox.showwarning("Empty", "No files found. Run Step 1.")
+                return
+            
+            self.status_var.set("Reading & Merging...")
+            self.root.update()
+            
+            # Combine all data
+            full_df = pl.concat([pl.read_csv(f) for f in files])
+            total_rows = len(full_df)
+            chunk_size = int(self.row_limit_entry.get())
+            
+            self.status_var.set("Writing Excel Sheets...")
+            self.root.update()
+
+            # --- NEW BYPASS LOGIC ---
+            # We use a context manager to handle the workbook manually
+            with xlsxwriter.Workbook(output_path) as workbook:
+                for i in range(0, total_rows, chunk_size):
+                    sheet_name = f"Data_Part_{(i // chunk_size) + 1}"
+                    chunk = full_df.slice(i, chunk_size)
+                    
+                    # This method is the most stable across all Polars versions
+                    chunk.write_excel(workbook=workbook, worksheet=sheet_name)
+            # ------------------------
+            
+            self.status_var.set(f"Excel Ready: {total_rows:,} rows.")
+            messagebox.showinfo("Success", f"Created {total_rows:,} rows in {output_path}")
+            
+        except Exception as e: 
+            messagebox.showerror("Final Error", f"Error Detail: {e}\n\nMake sure to run: pip install xlsxwriter")
+
+    def open_full_file(self):
+        path = os.path.join(self.base_path, self.full_excel_file)
+        if os.path.exists(path): os.startfile(path)
+        else: messagebox.showwarning("Missing", "Excel file not found.")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = DataMasterPro(root)
+    root.mainloop()</code></pre>
+        </div>
+    </div>
+
+    <!-- Syntax Highlighting Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>

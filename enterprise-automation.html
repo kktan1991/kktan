@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Finance Automation | KK Tan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        /* Base styles copied from index.html for consistency */
+        :root {
+            --bg-color: #050b14;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-cyan: #06b6d4;
+            --accent-gold: #ffb84d;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 40px 20px;
+        }
+        nav {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 40px;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--accent-cyan); }
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--accent-cyan); }
+        .case-study-header {
+            margin-bottom: 40px;
+        }
+        .case-study-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .case-study-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .tag {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-cyan);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .glass-panel h3 {
+            margin-top: 0;
+            color: var(--accent-gold);
+        }
+        pre {
+            border-radius: 8px !important;
+            border: 1px solid var(--glass-border) !important;
+            background: #111827 !important;
+            margin: 0 !important;
+        }
+        code {
+            font-family: 'Fira Code', monospace !important;
+            font-size: 0.9rem !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html" class="logo">KK_<span>TAN</span></a>
+            <a href="index.html#projects" class="back-link">← Back to Projects</a>
+        </nav>
+
+        <header class="case-study-header">
+            <h1 class="case-study-title">Enterprise Finance Automation</h1>
+            <div class="case-study-meta">
+                <span class="tag">Python</span>
+                <span class="tag">Pandas</span>
+                <span class="tag">Tkinter</span>
+                <span class="tag">Data Engineering</span>
+            </div>
+            <p style="color: var(--text-muted);">A sanitized version of the Hierarchy Chain Processor script used to automate end-of-month financial reconciliation, saving 200+ manual hours annually.</p>
+        </header>
+
+        <div class="glass-panel">
+            <h3>Project Overview</h3>
+            <p>This Python application provides a graphical user interface (GUI) for finance teams to process complex hierarchical account data. It reads raw Excel exports, cleans the data, builds a directed graph of account relationships, and resolves the full hierarchy chain for every account using memoized recursive functions. Finally, it exports the enriched data back to Excel.</p>
+            <p><strong>Key Engineering Features:</strong></p>
+            <ul>
+                <li><strong>Multi-threading:</strong> Keeps the UI responsive while processing large datasets.</li>
+                <li><strong>Memoization (<code>@lru_cache</code>):</strong> Drastically speeds up the recursive hierarchy resolution.</li>
+                <li><strong>Robust Data Cleaning:</strong> Handles missing values, inconsistent string formatting, and validates column counts dynamically.</li>
+            </ul>
+        </div>
+
+        <div class="glass-panel" style="padding: 0; overflow: hidden;">
+            <pre><code class="language-python">import pandas as pd
+import tkinter as tk
+from tkinter import filedialog, messagebox, ttk
+import threading
+import sys
+import os
+from functools import lru_cache
+
+# --- CONFIGURATION ---
+sys.setrecursionlimit(5000)
+
+class ChainProcessor:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Hierarchy Chain Processor")
+        self.root.geometry("600x350")
+        
+        self.file_path = tk.StringVar()
+        self.status_msg = tk.StringVar(value="Ready")
+        self.is_running = False
+
+        self._setup_gui()
+
+    def _setup_gui(self):
+        main_frame = tk.Frame(self.root, padx=20, pady=20)
+        main_frame.pack(fill=tk.BOTH, expand=True)
+
+        lbl = tk.Label(main_frame, text="Select Source Report:", font=("Arial", 10, "bold"))
+        lbl.pack(anchor="w")
+        
+        file_frame = tk.Frame(main_frame)
+        file_frame.pack(fill=tk.X, pady=5)
+        
+        entry = tk.Entry(file_frame, textvariable=self.file_path, width=50)
+        entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        
+        btn_browse = tk.Button(file_frame, text="Browse", command=self.browse_file)
+        btn_browse.pack(side=tk.LEFT, padx=5)
+
+        self.progress = ttk.Progressbar(main_frame, mode='determinate')
+        self.progress.pack(fill=tk.X, pady=20)
+        
+        lbl_status = tk.Label(main_frame, textvariable=self.status_msg, fg="blue")
+        lbl_status.pack()
+
+        self.btn_run = tk.Button(main_frame, text="RUN PROCESS", 
+                               command=self.start_thread, bg="green", fg="white", 
+                               font=("Arial", 11, "bold"), padx=20, pady=10)
+        self.btn_run.pack(pady=10)
+
+    def browse_file(self):
+        filename = filedialog.askopenfilename(filetypes=[("Excel Files", "*.xlsx;*.xls")])
+        if filename:
+            self.file_path.set(filename)
+
+    def start_thread(self):
+        if not self.file_path.get():
+            messagebox.showwarning("Error", "Select a file first.")
+            return
+        self.is_running = True
+        self.btn_run.config(state="disabled")
+        threading.Thread(target=self.process_logic, daemon=True).start()
+
+    def process_logic(self):
+        try:
+            input_file = self.file_path.get()
+            self.status_msg.set("Reading Excel...")
+            self.progress['value'] = 5
+
+            # 1. Capture Original Headers (Read just row 1)
+            header_df = pd.read_excel(input_file, sheet_name="SourceData", nrows=0)
+            original_headers = list(header_df.columns)
+
+            # 2. Read Data Logic (Robust Mode)
+            df = pd.read_excel(input_file, sheet_name="SourceData", header=None, skiprows=1)
+
+            # Validation
+            if df.shape[1] <= 16:
+                raise ValueError(f"File has only {df.shape[1]} columns. Need at least 17.")
+
+            self.status_msg.set("Cleaning data...")
+            
+            # 3. Clean Data (Using Index Numbers 0, 1, 4...)
+            df_clean = df[
+                pd.to_numeric(df[0], errors='coerce').notna()
+            ].copy()
+
+            # Force key columns to string
+            df_clean[0] = df_clean[0].astype(str).str.split('.').str[0].str.strip()   # Acct
+            df_clean[1] = df_clean[1].astype(str).str.strip()                          # Group
+            df_clean[4] = df_clean[4].astype(str).str.split('.').str[0].str.strip().replace(['nan', '0'], '')  # Parent
+            df_clean[7] = df_clean[7].astype(str).str.split('.').str[0].str.strip().replace(['nan', '0'], '')  # UID
+            df_clean[16] = df_clean[16].astype(str).str.strip().replace('nan', '')     # Name
+
+            self.status_msg.set("Building Graph...")
+            self.progress['value'] = 15
+
+            # 4. Build Lookup Map
+            ref_df = df_clean.drop_duplicates(subset=[0], keep='first')
+            acct_map = ref_df.set_index(0, drop=False).to_dict('index')
+
+            # 5. Solver (Memoization)
+            @lru_cache(maxsize=None)
+            def get_chain(current_acct):
+                if current_acct not in acct_map:
+                    return []
+                
+                node_data = acct_map[current_acct]
+                parent = node_data[4]  # Col 4 is Parent
+                
+                if parent == current_acct or parent == '':
+                    return [node_data]
+
+                return [node_data] + get_chain(parent)
+
+            # 6. Process Rows
+            self.status_msg.set("Processing Rows...")
+            results = []
+            total = len(df_clean)
+            
+            # Marker character used to identify internal nodes in the Name field
+            INTERNAL_MARKER = '*'
+
+            for idx, (index, row) in enumerate(df_clean.iterrows()):
+                acct = row[0]
+                full_chain = get_chain(acct)
+                
+                chain_accts = [x[0] for x in full_chain]
+                chain_names = [x[16] for x in full_chain]
+                chain_uids = [x[7] for x in full_chain if x[7] != '0']
+
+                external_nodes = [x for x in full_chain if INTERNAL_MARKER not in x[16]]
+                ext_names = [x[16] for x in external_nodes]
+                ext_accts = [x[0] for x in external_nodes]
+                ext_uids = [x[7] for x in external_nodes if x[7] != '0']
+
+                internal_count = len(full_chain) - len(external_nodes)
+                
+                first_internal_name = ""
+                mapped_acct_val = ""
+                
+                for node in full_chain:
+                    if INTERNAL_MARKER in node[16]:
+                        first_internal_name = node[16]
+                        mapped_acct_val = node[0]
+                        break
+                
+                last_external_name = ext_names[-1] if ext_names else ""
+                last_external_acct = ext_accts[-1] if ext_accts else ""
+
+                grp = row[1]
+                # Group codes that indicate a non-trading account type
+                MAPPED_GROUP_CODES = ["TYPE_A", "TYPE_B", "TYPE_C"]
+                acct_type = "Mapped Account" if any(x in grp for x in MAPPED_GROUP_CODES) else "Trading Account"
+
+                results.append({
+                    "Full Chain (Accounts)": ";".join(chain_accts),
+                    "Full Chain (Names)": ";".join(chain_names),
+                    "Full UID Chain (Include Login Level)": ";".join(chain_uids),
+                    "External Chain Count": len(ext_accts),
+                    "External Chain (Accounts)": ";".join(ext_accts),
+                    "External Chain (Names)": ";".join(ext_names),
+                    "External UID Chain": ";".join(ext_uids),
+                    "Internal Node Count": internal_count,
+                    "Direct Internal Name": first_internal_name,
+                    "Direct Internal Account": mapped_acct_val,
+                    "Top-Level External Name": last_external_name,
+                    "Top-Level External Account": last_external_acct,
+                    "Resolved Contact Name": first_internal_name if first_internal_name else last_external_name,
+                    "Account Type": acct_type
+                })
+
+                if idx % 1000 == 0:
+                     self.progress['value'] = 20 + (idx / total * 70)
+                     self.root.update_idletasks()
+
+            # 7. Export and Restore Headers
+            self.status_msg.set("Saving...")
+            result_df = pd.DataFrame(results)
+            
+            df_final = pd.concat([df_clean.reset_index(drop=True), result_df], axis=1)
+            
+            # --- RESTORE HEADERS ---
+            new_columns = list(result_df.columns)
+            current_col_count = df_clean.shape[1]
+            final_headers = original_headers[:current_col_count] + new_columns
+            
+            df_final.columns = final_headers
+            
+            out_path = os.path.splitext(input_file)[0] + "_PROCESSED.xlsx"
+            df_final.to_excel(out_path, index=False)
+            
+            self.progress['value'] = 100
+            self.status_msg.set("Done!")
+            messagebox.showinfo("Success", f"Saved to:\n{out_path}")
+
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            messagebox.showerror("Error", f"{str(e)}")
+            self.status_msg.set("Failed")
+        finally:
+            self.is_running = False
+            self.btn_run.config(state="normal")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ChainProcessor(root)
+    root.mainloop()</code></pre>
+        </div>
+    </div>
+
+    <!-- Syntax Highlighting Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>

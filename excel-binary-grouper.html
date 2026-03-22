@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Binary Sheet Grouper | KK Tan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        /* Base styles copied from index.html for consistency */
+        :root {
+            --bg-color: #050b14;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-cyan: #06b6d4;
+            --accent-gold: #ffb84d;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 40px 20px;
+        }
+        nav {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 40px;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--accent-cyan); }
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--accent-cyan); }
+        .case-study-header {
+            margin-bottom: 40px;
+        }
+        .case-study-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .case-study-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .tag {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-cyan);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .glass-panel h3 {
+            margin-top: 0;
+            color: var(--accent-gold);
+        }
+        pre {
+            border-radius: 8px !important;
+            border: 1px solid var(--glass-border) !important;
+            background: #111827 !important;
+            margin: 0 !important;
+        }
+        code {
+            font-family: 'Fira Code', monospace !important;
+            font-size: 0.9rem !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html" class="logo">KK_<span>TAN</span></a>
+            <a href="index.html#projects" class="back-link">← Back to Projects</a>
+        </nav>
+
+        <header class="case-study-header">
+            <h1 class="case-study-title">Excel Binary Sheet Grouper</h1>
+            <div class="case-study-meta">
+                <span class="tag">Python</span>
+                <span class="tag">Pandas</span>
+                <span class="tag">Tkinter</span>
+                <span class="tag">Data Processing</span>
+            </div>
+            <p style="color: var(--text-muted);">A Python automation tool that processes massive Excel Binary (.xlsb) files, extracting, grouping, and aggregating data across multiple sheets with real-time progress tracking.</p>
+        </header>
+
+        <div class="glass-panel">
+            <h3>Project Overview</h3>
+            <p>Processing large Excel Binary files (.xlsb) with numerous sheets can be incredibly slow and memory-intensive. This tool automates the extraction and aggregation of specific data columns across all numbered sheets within a workbook.</p>
+            <p><strong>Key Engineering Features:</strong></p>
+            <ul>
+                <li><strong>Binary File Processing:</strong> Utilizes the <code>pyxlsb</code> engine in Pandas to efficiently read large binary Excel files.</li>
+                <li><strong>Automated Aggregation:</strong> Automatically identifies numbered sheets, extracts specific columns, and performs GroupBy sum operations.</li>
+                <li><strong>Real-Time ETA:</strong> Features a Tkinter GUI with a progress bar and dynamic ETA calculation to keep users informed during long processing jobs.</li>
+            </ul>
+        </div>
+
+        <div class="glass-panel" style="padding: 0; overflow: hidden;">
+            <pre><code class="language-python">import pandas as pd
+import tkinter as tk
+import time
+import os
+from tkinter import filedialog, messagebox, ttk
+
+def process_excel(file_path, progress_bar, time_label):
+    xls = pd.ExcelFile(file_path, engine='pyxlsb')
+    numbered_sheets = [s for s in xls.sheet_names if s.isdigit()]
+    all_dfs = []
+    total = len(numbered_sheets)
+    skipped = []
+
+    # Get header names from first numbered sheet
+    first_numbered = numbered_sheets[0]
+    first_df_header = pd.read_excel(file_path, sheet_name=first_numbered, engine='pyxlsb', nrows=0)
+    header_names_from_first_numbered = first_df_header.columns.tolist()
+
+    # Update these indexes for your columns: 2=C, 9=J, 5=F, 11=L, 6=G
+    col_indices = [2, 9, 5, 11, 6]
+    start_time = time.time()
+
+    for idx, sheet in enumerate(numbered_sheets, 1):
+        df = pd.read_excel(file_path, sheet_name=sheet, engine='pyxlsb', header=None)
+        if df.shape[1] &lt;= max(col_indices):
+            skipped.append(str(sheet))
+            continue
+        try:
+            # Assign output headers from first numbered sheet
+            df.columns = header_names_from_first_numbered + [f'Extra_{i}' for i in range(df.shape[1] - len(header_names_from_first_numbered))]
+            group_cols = [df.columns[i] for i in col_indices[:-1]]
+            sum_col = df.columns[col_indices[-1]]
+        except IndexError:
+            skipped.append(str(sheet))
+            continue
+
+        grouped = df.groupby(group_cols, as_index=False)[sum_col].sum()
+        grouped['sheet'] = sheet
+        all_dfs.append(grouped)
+
+        # Progress & ETA
+        prog = int(idx / total * 100)
+        progress_bar['value'] = prog
+        elapsed = time.time() - start_time
+        avg_per_sheet = elapsed / idx
+        remaining = avg_per_sheet * (total - idx)
+        mins, secs = divmod(int(remaining), 60)
+        time_label.config(text=f"{prog}% complete | Estimated time left: {mins}m {secs}s")
+        root.update_idletasks()
+
+    # Combine and save output
+    if all_dfs:
+        final_df = pd.concat(all_dfs, ignore_index=True)
+        out_headers = [header_names_from_first_numbered[i] for i in col_indices[:-1]] + [header_names_from_first_numbered[col_indices[-1]], 'sheet']
+        final_df.columns = out_headers
+        
+        # Autosave output in same directory with suffix '_grouped.xlsx'
+        base, ext = os.path.splitext(file_path)
+        output_path = base + "_grouped.xlsx"
+        final_df.to_excel(output_path, index=False)
+        messagebox.showinfo("Export Successful", f"Output saved to:\n{output_path}")
+    else:
+        messagebox.showwarning("No Data", "No valid sheets processed.\nSkipped sheets: " + ', '.join(skipped))
+
+    progress_bar['value'] = 100
+    time_label.config(text="100% complete | Processing finished.")
+
+def select_file(progress_bar, time_label):
+    file_path = filedialog.askopenfilename(title="Select Excel Binary File", filetypes=[("Excel Binary Files", "*.xlsb")])
+    if file_path:
+        try:
+            progress_bar['value'] = 0
+            time_label.config(text="")
+            process_excel(file_path, progress_bar, time_label)
+        except Exception as e:
+            messagebox.showerror("Error", f"Processing failed: {e}")
+            progress_bar['value'] = 0
+            time_label.config(text="")
+
+root = tk.Tk()
+root.title("Excel Binary Sheet Grouper (No Display, AutoSave)")
+
+frame = tk.Frame(root)
+frame.pack(padx=10, pady=10)
+
+button = tk.Button(frame, text="Select Excel Binary File", command=lambda: select_file(progress_bar, time_label))
+button.pack(pady=5)
+
+progress_bar = ttk.Progressbar(root, orient="horizontal", length=500, mode='determinate')
+progress_bar.pack(padx=10, pady=5)
+
+time_label = tk.Label(root, text="")
+time_label.pack(padx=10, pady=5)
+
+root.mainloop()</code></pre>
+        </div>
+    </div>
+
+    <!-- Syntax Highlighting Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
