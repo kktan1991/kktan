@@ -27,7 +27,7 @@ This project is a high-performance, glassmorphism-styled portfolio website that 
 
 - **Interactive UI**: Typewriter effects, smooth scrolling, and responsive mobile navigation.
 - **Project Modules**: A bento-grid display of my key automation achievements and their business impact.
-- **Learning Hub**: Curated resources including my "AI & Automation Masterclass" YouTube series and guides on MCP and `uv`.
+- **My Learning Hub**: Curated resources including "AI & Automation Masterclass" YouTube series and guides on MCP and `uv`.
 - **Utility Tools**: Direct access to productivity tools like the browser-based Markdown editor.
 - **Connect Section**: Integrated handshake points for professional inquiries via Email, WhatsApp, LinkedIn, and Upwork.
 
