@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>n8n Automation Workflows | KK Tan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles copied from index.html for consistency */
+        :root {
+            --bg-color: #050b14;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-cyan: #06b6d4;
+            --accent-gold: #ffb84d;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 40px 20px;
+        }
+        nav {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 40px;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--accent-cyan); }
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--accent-cyan); }
+        .case-study-header {
+            margin-bottom: 40px;
+        }
+        .case-study-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .case-study-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tag {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-cyan);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .glass-panel h3 {
+            margin-top: 0;
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .glass-panel h4 {
+            color: var(--text-main);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        .btn-cyan {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+        }
+        .btn-cyan:hover {
+            background: var(--accent-cyan);
+            color: #000;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <nav>
+        <div class="container nav-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="index.html#home" class="logo">
+                <span class="logo-icon">⚡</span> KK_Tan
+            </a>
+            <ul class="nav-links" id="nav-links" style="display: flex; list-style: none; gap: 20px; margin: 0; padding: 0;">
+                <li><a href="index.html#home" style="color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.3s;">// HOME</a></li>
+                <li><a href="index.html#about" style="color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.3s;">// SYSTEM.ABOUT</a></li>
+                <li><a href="index.html#projects" style="color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.3s;">// MODULES</a></li>
+                <li><a href="n8n-workflows.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.3s;">// N8N</a></li>
+                <li><a href="index.html#resources" style="color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.3s;">// RESOURCES</a></li>
+                <li><a href="index.html#tools" style="color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.3s;">// TOOLS</a></li>
+                <li><a href="index.html#contact" style="color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.3s;">// CONNECT</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <header class="case-study-header">
+            <h1 class="case-study-title">n8n Automation Workflows</h1>
+            <div class="case-study-meta">
+                <span class="tag">n8n</span>
+                <span class="tag">API Automation</span>
+                <span class="tag">Business Logic</span>
+                <span class="tag">Zeabur</span>
+            </div>
+            <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 800px;">
+                Building predictable, reliable systems to eliminate manual tasks, plug revenue leaks, and scale operations without scaling headcount.
+            </p>
+        </header>
+
+        <!-- Workflow 1: Retention Engine -->
+        <div class="glass-panel">
+            <h3>⚙️ Stop the Leak: Modular "Retention Engine" for Service Businesses</h3>
+            <p>In 10 years of finance, I’ve learned that the most expensive customer is the one you already have but forget to follow up with. Whether it’s a car service, a dental check-up, or a road tax renewal, businesses lose thousands in "leaky" revenue simply because life gets busy and customers forget. I’ve developed a systematic solution using n8n to automate this entire lifecycle.</p>
+            
+            <h4>The "Universal Reminder" Framework</h4>
+            <p>Instead of a simple "one-off" email, I built a 3-tier "Waterfall" system:</p>
+            <ul>
+                <li><strong>30 Days Out:</strong> Awareness & Planning.</li>
+                <li><strong>14 Days Out:</strong> Active Scheduling.</li>
+                <li><strong>7 Days Out:</strong> The Urgent "Final Call."</li>
+            </ul>
+
+            <h4>Business Use Cases</h4>
+            <p>It’s not just for the workshop. This same logic is a perfect fit for:</p>
+            <ul>
+                <li>❄️ <strong>Air-Con Servicing:</strong> Ensuring homes stay cool in our Malaysian heat before the unit breaks down.</li>
+                <li>🦷 <strong>Dental Clinics:</strong> Automating the 6-month routine scaling and check-up cycle.</li>
+                <li>📋 <strong>Insurance & Road Tax:</strong> Critical 30-day countdowns to keep drivers legal and covered.</li>
+                <li>📑 <strong>Accounting/Secretarial:</strong> Managing non-negotiable filing deadlines for SSM and LHDN.</li>
+            </ul>
+
+            <h4>The Best Part? It’s Modular.</h4>
+            <p>While the current engine sends professional Emails, the "Brain" is channel-agnostic. Swapping to WhatsApp Business is a simple plug-and-play upgrade without rewriting the core logic.</p>
+            <p><em>Automation is about more than just speed—it’s about creating a predictable, reliable customer experience.</em></p>
+
+            <a href="https://www.linkedin.com/posts/tankienkiong_n8n-businessautomation-customerretention-activity-7447259624619204608-N9O7?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" rel="noopener noreferrer" class="btn btn-cyan">Read Full Post on LinkedIn ↗</a>
+        </div>
+
+        <!-- Workflow 2: Social Media Engine -->
+        <div class="glass-panel">
+            <h3>⚙️ Stop Manual Posting: Social Media Distribution Engine</h3>
+            <p>Diving deep into n8n and API automation to solve a common business headache: the "Social Media Time Sink." Instead of manual uploads, I’ve built a self-hosted automation engine on Zeabur that manages content distribution from a single Google Sheets command center.</p>
+
+            <h4>The Workflow Breakdown</h4>
+            <ul>
+                <li>✅ <strong>Central Database:</strong> Google Sheets acts as the "Brain" where I schedule content, image URLs, and target platforms.</li>
+                <li>✅ <strong>Intelligent Filtering:</strong> The system checks the clock and only picks up "Pending" posts that are due.</li>
+                <li>✅ <strong>Binary Image Handling:</strong> It doesn't just send links; the workflow fetches raw image data from Google Drive to ensure high-quality native uploads.</li>
+                <li>✅ <strong>Multi-Platform Routing:</strong> Using conditional logic, it routes content to LinkedIn and Facebook simultaneously.</li>
+                <li>✅ <strong>Closed-Loop Logic:</strong> Once posted, n8n writes back to the sheet to update the status to "Posted"—preventing duplicates and maintaining a perfect audit trail.</li>
+            </ul>
+
+            <h4>Business Use Cases & Potential</h4>
+            <ul>
+                <li>🔹 <strong>Small Businesses (SMEs):</strong> Perfect for brands repo, allowing owners to focus on production while the "Digital Assistant" handles the marketing.</li>
+                <li>🔹 <strong>Lean Marketing Teams:</strong> One person can manage 5+ platforms without ever leaving a spreadsheet.</li>
+                <li>🔹 <strong>Finance & Compliance:</strong> In my 10 years in finance, I’ve seen how manual errors creep in. This system creates a clear, automated record of what was communicated and when.</li>
+                <li>🔹 <strong>Scalability:</strong> This isn't just for social media. This same logic can be applied to automated invoicing, reporting, or CRM updates.</li>
+            </ul>
+
+            <p><em>Automation isn't about replacing the human element; it's about removing the "robotic" tasks from the human workday.</em></p>
+
+            <a href="https://www.linkedin.com/posts/tankienkiong_n8n-automation-digitaltransformation-activity-7447236974664658944-ciRe?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" rel="noopener noreferrer" class="btn btn-cyan">Read Full Post on LinkedIn ↗</a>
+        </div>
+
+        <!-- Workflow 3: AI-Driven News Intelligence Engine -->
+        <div class="glass-panel">
+            <h3>⚙️ AI-Driven News Intelligence Engine</h3>
+            <p>In 2026, the problem isn't a lack of information—it’s the "noise" that comes with it. I spent the last few days perfecting an AI-Driven News Intelligence Engine that transforms a chaotic RSS feed into a high-value daily briefing.</p>
+
+            <h4>The Architecture: Built for Efficiency</h4>
+            <ul>
+                <li>✅ <strong>The Watcher (Real-time):</strong> An RSS Feed Trigger monitors sources like Techmeme 24/7. It only "wakes up" when a brand-new story breaks.</li>
+                <li>✅ <strong>The Analyst (AI):</strong> Instead of reading long snippets, the DeepSeek API generates a punchy, one-sentence summary for every article.</li>
+                <li>✅ <strong>The Archive (Database):</strong> Data is structured in a Google Sheet—complete with secure HTTPS image extraction and deduplication logic.</li>
+                <li>✅ <strong>The Delivery (Automated):</strong> Once a day, the system assembles the "unsent" news into a professional, mobile-responsive HTML newsletter and delivers it straight to my inbox.</li>
+            </ul>
+
+            <h4>The 3 Key Benefits</h4>
+            <ul>
+                <li>🔹 <strong>Zero Signal-to-Noise Ratio:</strong> I don't see ads, sponsored "fluff," or duplicate headlines. I only see the core facts.</li>
+                <li>🔹 <strong>Infrastructure Ownership:</strong> Unlike paid newsletter services, I own the data and the logic. There are no monthly subscriptions, only minimal API costs.</li>
+                <li>🔹 <strong>Scalability:</strong> This system can handle 10 articles or 1,000 without me lifting a finger.</li>
+            </ul>
+
+            <h4>Beyond Personal Use: Business Use Cases 💼</h4>
+            <ul>
+                <li>📈 <strong>Competitor Intelligence:</strong> Automatically track every mention of a competitor’s product or stock price and summarize the sentiment for your executive team.</li>
+                <li>📈 <strong>Sales Enablement:</strong> Feed your sales team a daily "Morning Brief" of their top 50 prospects' company news, so they always have a warm talking point for calls.</li>
+                <li>📈 <strong>Internal Knowledge Management:</strong> Keep your engineering or marketing teams updated on industry shifts without forcing them to spend hours on social media or news sites.</li>
+                <li>📈 <strong>PR & Brand Monitoring:</strong> Track brand mentions across the web and instantly get an AI-generated "Urgency Score" for each mention.</li>
+            </ul>
+
+            <h4>🚀 Upgrade: Supercharging AI & Finance Insights</h4>
+            <p>I recently upgraded this daily n8n newsletter & Telegram feed to make market tracking smarter and faster:</p>
+            <ul>
+                <li>1️⃣ <strong>Curated Sources:</strong> Only top Finance & AI news, cutting the noise.</li>
+                <li>2️⃣ <strong>Smart Categorization:</strong> News tagged by Finance / AI so you get what matters most.</li>
+                <li>3️⃣ <strong>Market Impact Indicator:</strong> Each news item labeled Bullish / Bearish / Neutral to help anticipate market moves.</li>
+                <li>4️⃣ <strong>Time-Saving Automation:</strong> Delivered directly via newsletter & Telegram — no endless scrolling.</li>
+                <li>5️⃣ <strong>Actionable Insights:</strong> Not just headlines — each update gives context for decision-making.</li>
+            </ul>
+            <p><em>The future of work isn't about working harder; it's about building the systems that do the "filtering" for you.</em></p>
+
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+                <a href="https://www.linkedin.com/pulse/stop-chasing-news-start-curating-intelligence-tan-kien-kiong-cdeie/?trackingId=85YgNFgXzGbc4iMgwNqD0A%3D%3D" target="_blank" rel="noopener noreferrer" class="btn btn-cyan" style="margin-top: 0;">Read Article on LinkedIn ↗</a>
+                <a href="https://www.linkedin.com/posts/tankienkiong_supercharging-my-daily-ai-finance-insights-activity-7445424809976705024-Ihi7?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" rel="noopener noreferrer" class="btn btn-cyan" style="margin-top: 0;">View Upgrade Post ↗</a>
+            </div>
+        </div>
+
+        <!-- Workflow 4: Automated Invoice Generator -->
+        <div class="glass-panel">
+            <h3>⚙️ 100% Automated Invoice Generator</h3>
+            <p>I’ve just finished building a 100% automated Invoice Generator that handles the heavy lifting so business owners don't have to. If you’re still manually typing out invoices every month, you’re losing hours of your life to a task that a machine can do perfectly.</p>
+
+            <h4>The Flow: Simple & Reliable</h4>
+            <p>This system uses the Google Workspace tools you already know:</p>
+            <ul>
+                <li>✅ <strong>Google Drive:</strong> Drop your data sheet into a designated folder.</li>
+                <li>✅ <strong>Google Docs:</strong> The system automatically picks up your template and fills in the customer details and amounts.</li>
+                <li>✅ <strong>Google Drive:</strong> A professional PDF is instantly generated and saved with the correct invoice number.</li>
+            </ul>
+
+            <h4>Why Does This Matter?</h4>
+            <ul>
+                <li>🔹 <strong>Zero Typos:</strong> No more "copy-paste" errors or manual entry mistakes.</li>
+                <li>🔹 <strong>Bulk Processing:</strong> Whether it's 1 invoice or 100, the system handles them all in seconds.</li>
+                <li>🔹 <strong>Peace of Mind:</strong> You spend less time worrying about paperwork and more time growing your business.</li>
+            </ul>
+
+            <p><em>I’m passionate about building these "hands-off" systems for finance teams. Let’s make business simpler! 💡</em></p>
+
+            <a href="https://www.linkedin.com/posts/tankienkiong_automation-businessefficiency-googleworkspace-activity-7444820262790987776-v3dx?utm_source=share&utm_medium=member_desktop&rcm=ACoAABCwTdEBEhqhe97rd6UL9s9U6JbWhzSitOw" target="_blank" rel="noopener noreferrer" class="btn btn-cyan">Read Full Post on LinkedIn ↗</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
